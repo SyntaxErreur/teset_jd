@@ -1,4 +1,4 @@
 streamlit
 openai
-dotenv
+
 pyttsx3
