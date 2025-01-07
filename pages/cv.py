@@ -21,7 +21,7 @@ class JobDescriptionAnalyzer:
         }
 
     def analyze_job_description(self, jd_text: str) -> Dict:
-        """Analyze job description using GPT-4 to extract structured information."""
+        """Analyze job description using gpt-4o-mini to extract structured information."""
         system_prompt = """You are an expert job description analyzer. Extract structured information from the provided job description.
         Return only a JSON object with the extracted information organized according to the given categories and parameters.
         If information is not found, include the parameter with an empty list."""
@@ -44,7 +44,7 @@ class JobDescriptionAnalyzer:
 
         try:
             response = client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": analysis_prompt}
@@ -91,7 +91,7 @@ class QuestionGenerator:
 
         try:
             response = client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": context_prompt}
@@ -105,7 +105,7 @@ class QuestionGenerator:
 
 class ResponseValidator:
     def validate_response(self, response: str, param: str, role_context: str, category: str, collected_data: Dict) -> Tuple[bool, Optional[str], List[str]]:
-        """Validate user response using GPT-4."""
+        """Validate user response using gpt-4o-mini."""
         if response.lower() in ['skip', 'no', 'none', 'na', 'next']:
             return True, None, ['Not specified']
 
@@ -132,7 +132,7 @@ class ResponseValidator:
 
         try:
             response = client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": validation_prompt}
@@ -271,7 +271,7 @@ def main():
 
             try:
                 response = client.chat.completions.create(
-                    model="gpt-4",
+                    model="gpt-4o-mini",
                     messages=[
                         {"role": "system", "content": system_prompt},
                         {"role": "user", "content": final_jd_prompt}
