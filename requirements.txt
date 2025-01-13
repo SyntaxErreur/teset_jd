@@ -3,3 +3,4 @@ openai
 python-dotenv
 pyttsx3
 fpdf
+markdown2
