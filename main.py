@@ -1,7 +1,6 @@
 import os
 import re
 import json
-import spacy
 from openai import OpenAI
 import streamlit as st
 from typing import Dict, List, Any, Union
