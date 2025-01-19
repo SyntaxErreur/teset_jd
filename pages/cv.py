@@ -1,3 +1,4 @@
+from typing import List, Dict
 from typing import Dict, Tuple
 import os
 import json
@@ -10,18 +11,21 @@ from pydantic import BaseModel
 import logging
 from fpdf import FPDF
 import markdown2
+import datetime
+
+st.set_page_config(page_title="JD Enhancement Assistant", layout="wide")
 
 # # Configure logging
-# logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+# logging.basicConfig(level=printf, format="%(asctime)s - %(levelname)s - %(message)s")
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_KEY"))
 
 
-import logging
-
 # Configure logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s - %(levelname)s - %(message)s")
+
 
 class JobDescriptionAnalyzer:
     def __init__(self):
@@ -65,7 +69,8 @@ class JobDescriptionAnalyzer:
 
             # Preprocess response to extract JSON (handle triple backticks and extra formatting)
             if raw_response.startswith("```json"):
-                raw_response = raw_response.strip("```json").strip("```").strip()
+                raw_response = raw_response.strip(
+                    "```json").strip("```").strip()
 
             # Parse the JSON content
             analyzed_data = json.loads(raw_response)
@@ -86,13 +91,19 @@ class JobDescriptionAnalyzer:
             print("Response content:", raw_response)
             return {category: {param: [] for param in params} for category, params in self.parameter_structure.items()}
         except Exception as e:
-            st.error("Error analyzing job description. Please check the job description and try again.")
+            st.error(
+                "Error analyzing job description. Please check the job description and try again.")
             print(f"Unexpected Error: {e}")
             return {category: {param: [] for param in params} for category, params in self.parameter_structure.items()}
 
+
 class FileManager:
+    
     @staticmethod
     def load_json(filepath: str) -> Dict:
+        if not isinstance(filepath, (str, os.PathLike)):
+            raise TypeError(
+                f"Expected filepath to be a string or os.PathLike, got {type(filepath).__name__} instead.")
         if os.path.exists(filepath):
             with open(filepath, 'r') as file:
                 return json.load(file)
@@ -102,6 +113,34 @@ class FileManager:
     def save_json(filepath: str, data: Dict):
         with open(filepath, 'w') as file:
             json.dump(data, file, indent=4)
+
+    @staticmethod
+    def save_questions(file_path: str, questions_data: dict):
+        """Save questions to JSON file with logging and error handling."""
+        try:
+            # Load existing data if file exists
+            if os.path.exists(file_path):
+                with open(file_path, 'r') as file:
+                    existing_data = json.load(file)
+
+                # Ensure the structure is valid
+                if not isinstance(existing_data, dict) or "all_questions" not in existing_data:
+                    existing_data = {"all_questions": []}
+            else:
+                # Initialize new structure if file doesn't exist
+                existing_data = {"all_questions": []}
+
+            # Append the new questions data
+            existing_data["all_questions"].append(questions_data)
+
+            # Save the updated data
+            with open(file_path, 'w') as file:
+                json.dump(existing_data, file, indent=4)
+
+            print(f"Questions saved successfully to {file_path}")
+
+        except Exception as e:
+            print(f"Error saving questions to {file_path}: {e}")
 
 
 class QuestionGenerator:
@@ -234,7 +273,7 @@ def validate_response(user_input: str, conversation_history: str) -> ValidationR
             print(" ============== Bot reply =========")
             print(bot_reply)
             print(" ==========================")
-            
+
             if bot_reply.get("category") in ["answered", "partially_answered"]:
                 return ValidationResponse(
                     category=bot_reply["category"],
@@ -448,7 +487,6 @@ def validate_response(user_input: str, conversation_history: str) -> ValidationR
             temperature=0.5
         )
 
-
         parsed_response = json.loads(completion.choices[0].message.content)
         category = parsed_response.get("category")
 
@@ -467,18 +505,21 @@ def validate_response(user_input: str, conversation_history: str) -> ValidationR
     except Exception as e:
         raise ValueError(f"Error during validation: {str(e)}")
 
+
 def main():
-    st.set_page_config(page_title="JD Enhancement Assistant", layout="wide")
     st.title("Job Description Assistant")
-    st.markdown("Transform your job descriptions into comprehensive and effective listings for Perfect Candidates! 🚀")
+    st.markdown(
+        "Transform your job descriptions into comprehensive and effective listings for Perfect Candidates! 🚀")
 
     # File path for JSON storage
+    global db_path
     db_path = "db.json"
 
     # Load or initialize JSON data
     try:
         db_data = FileManager.load_json(db_path)
-        if not db_data or all(not params for params in db_data.values()):  # Ensure the file is not empty
+        # Ensure the file is not empty
+        if not db_data or all(not params for params in db_data.values()):
             db_data = {
                 "Position Details": {
                     "role_title": [],
@@ -521,7 +562,6 @@ def main():
         print(f"Error initializing db.json: {e}")
         return
 
-
     # Initialize session state
     if "state" not in st.session_state:
         st.session_state.state = {
@@ -543,7 +583,8 @@ def main():
                 with st.spinner("Analyzing job description..."):
                     try:
                         # Analyze JD
-                        analyzed_data = analyzer.analyze_job_description(jd_text)
+                        analyzed_data = analyzer.analyze_job_description(
+                            jd_text)
                         if analyzed_data:
                             db_data.update(analyzed_data)
                             FileManager.save_json(db_path, db_data)
@@ -559,27 +600,30 @@ def main():
                             st.session_state.state["jd_analyzed"] = True
 
                             # Log missing parameters
-                            logging.info("Missing Parameters Identified:")
+                            print("Missing Parameters Identified:")
                             for category, param in missing_params:
-                                logging.info(f"- {category}: {param}")
+                                print(f"- {category}: {param}")
 
                             # Display missing parameters
                             if missing_params:
-                                st.markdown("### Missing Parameters Identified:")
+                                st.markdown(
+                                    "### Missing Parameters Identified:")
                                 for category, param in missing_params:
                                     st.markdown(f"- **{category}**: {param}")
                             else:
-                                st.success("No missing parameters! Ready to generate the JD.")
+                                st.success(
+                                    "No missing parameters! Ready to generate the JD.")
 
                             st.rerun()
                         else:
-                            st.error("Analysis failed. Please check the job description and try again.")
+                            st.error(
+                                "Analysis failed. Please check the job description and try again.")
                     except Exception as e:
-                        st.error("Error analyzing job description. Please try again.")
+                        st.error(
+                            "Error analyzing job description. Please try again.")
                         logging.error(f"Error during JD analysis: {e}")
             else:
                 st.warning("Please enter a valid job description.")
-
 
     # Handle Missing Parameters
     if st.session_state.state["jd_analyzed"]:
@@ -589,14 +633,16 @@ def main():
                 st.markdown(message["content"], unsafe_allow_html=True)
 
         if st.session_state.state["missing_params"]:
-            category, param = st.session_state.state["missing_params"][st.session_state.state["current_param_index"]]
+            category, param = st.session_state.state["missing_params"][
+                st.session_state.state["current_param_index"]]
             role_context = db_data["Position Details"].get("role_title", [])
             role_context = role_context[0] if role_context else "Unknown Role"
 
             # Generate question and display if not already asked
             if not st.session_state.state["conversation_history"] or \
                st.session_state.state["conversation_history"][-1]["role"] == "user":
-                question = question_gen.generate_contextual_question(param, role_context, category, db_data)
+                question = question_gen.generate_contextual_question(
+                    param, role_context, category, db_data)
                 st.session_state.state["conversation_history"].append(
                     {"role": "assistant", "content": question}
                 )
@@ -612,11 +658,13 @@ def main():
                     [f"{msg['role'].capitalize()}: {msg['content']}" for msg in st.session_state.state["conversation_history"]]
                 )
                 try:
-                    validation_result = validate_response(user_response, conversation_history_str)
+                    validation_result = validate_response(
+                        user_response, conversation_history_str)
 
                     if validation_result.category == Category.answered:
                         # Update database with bot explanation and save to file
-                        db_data[category][param] = [validation_result.explanation]
+                        db_data[category][param] = [
+                            validation_result.explanation]
                         FileManager.save_json(db_path, db_data)
                         st.session_state.state["current_param_index"] += 1
                         if st.session_state.state["current_param_index"] >= len(st.session_state.state["missing_params"]):
@@ -630,11 +678,13 @@ def main():
                         st.success(f"Response for {param} saved successfully!")
                     elif validation_result.category == Category.partially_answered:
                         st.session_state.state["conversation_history"].append(
-                            {"role": "assistant", "content": validation_result.explanation}
+                            {"role": "assistant",
+                                "content": validation_result.explanation}
                         )
                     else:
                         st.session_state.state["conversation_history"].append(
-                            {"role": "assistant", "content": validation_result.explanation}
+                            {"role": "assistant",
+                                "content": validation_result.explanation}
                         )
                     st.rerun()
                 except Exception as e:
@@ -664,6 +714,7 @@ def generate_final_jd(db_data):
         - Use markdown formatting"""
 
         try:
+            # Generate Job Description
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
@@ -673,18 +724,156 @@ def generate_final_jd(db_data):
                 temperature=0.7
             )
             final_jd = response.choices[0].message.content
+
+            # Display Job Description
             st.markdown("## 📋 Enhanced Job Description")
             st.markdown(final_jd, unsafe_allow_html=True)
 
+            # Download Button
             st.download_button(
                 label="Download Enhanced JD",
                 data=final_jd,
                 file_name="enhanced_job_description.md",
                 mime="text/markdown"
             )
+
+            # Add a separator
+            st.markdown("---")
+
+            # Generate Initial Questions
+            st.markdown("## 🎯 Interview Questions")
+
+            with st.spinner("Generating interview questions..."):
+                # Initialize questions in session state if not present
+                if 'questions' not in st.session_state:
+                    st.session_state.questions = []
+                    initial_questions = generate_questions(db_path, [])
+                    if initial_questions:
+                        st.session_state.questions.extend(initial_questions)
+                        # Store questions in question.json
+
+                # Display Questions
+                if st.session_state.questions:
+                    for i, question in enumerate(st.session_state.questions, 1):
+                        st.markdown(f"**Q{i}.** {question}")
+                        # st.rerun()
+
+                # col1 = st.columns([1, 4])
+                # with col1:
+                #     if st.button("Generate More Questions"):
+                #         with st.spinner("Generating additional questions..."):
+                #             new_questions = generate_questions(
+                #                 db_path, st.session_state.questions)
+                #             st.session_state.questions.extend(
+                #                 new_questions)
+
+
         except Exception as e:
             st.error(f"Error generating final job description: {str(e)}")
             print(f"JD generation error: {e}")
+
+
+def generate_questions(db_path: str, asked_questions: List[str] = []) -> List[str]:
+    """Generate role-specific interview questions."""
+    try:
+        db_data = FileManager.load_json(db_path)
+        system_prompt = f"""
+        You are a professional recruiter and industry-level interview expert tasked with creating role-specific interview questions tailored to a fully enhanced job description. Your goal is to design questions that assess candidates effectively for the specified role.
+
+        Instructions:
+    You are a professional recruiter and industry-level interview expert tasked with creating role-specific interview questions tailored to a fully enhanced job description. Your goal is to design questions that assess candidates effectively for the specified role. 
+
+        1. Analyze the Role Context:
+        - Review the `role_title`, `grade_level`, and `experience_required` to tailor the difficulty and scope of the questions.
+
+        2. Evaluate the Fully Enhanced Job Description:
+        - Use the following key sections from the job description:
+            - Technical Requirements: `mandatory_skills`, `technical_skills`, `good_to_have_skills`
+            - Job Responsibilities: `primary_responsibilities`, `team_responsibilities`, `project_responsibilities`
+            - Soft Skills: `communication_skills`, `interpersonal_skills`, `other_competencies`
+
+        3.Generate 10 Professional Questions:
+        - Frame highly professional and formal interview questions focusing on the following areas:
+            - Technical Skills: Evaluate the candidate’s expertise in the tools, technologies, and methodologies listed in the job description.
+            - Job Responsibilities: Assess the candidate's ability to handle responsibilities similar to those described in the role.
+            - Soft Skills: Include questions to evaluate communication, problem-solving, leadership, and collaboration abilities.
+
+        4.Formatting:
+        - Each question must be specific, clear, and directly relevant to the job description.
+        - Use industry-standard phrasing suitable for formal interviews.
+
+        5.Output:
+        - Generate a total of 10 questions.
+        - End the output with this message:
+            _"Would you like more questions tailored to this role? Let me know, and I can provide additional questions as needed."
+
+        Context:
+        This task is based on the following fully enhanced job description data:
+        {json.dumps(db_data, indent=2)}
+
+        Important Notes:
+        - Only use the data provided in the `enhanced_job_description` to frame questions. Do not introduce topics outside the listed skills, responsibilities, and soft skills.
+        - Ensure the tone is professional and reflective of a seasoned hiring manager.
+
+        Your output must strictly adhere to the following format:
+        1. Question 1: [Your question here]
+        2. Question 2: [Your question here]
+        ...
+        10. Question 10: [Your question here]
+
+        End with this message:
+        "Would you like more questions tailored to this role? Let me know, and I can provide additional questions as needed."
+        """
+        print("DB Data being passed to OpenAI API:")
+        print(json.dumps(db_data, indent=2))
+
+        print("Asked Questions:")
+        print(asked_questions)
+
+        # Generate questions using GPT-4o-mini
+
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": "Generate 10 interview questions based on the enhanced job description."}
+            ],
+            temperature=0.7
+        )
+        questions_text = response.choices[0].message.content
+
+        # Parse the questions into a list
+        questions = [
+            q.split(". ", 1)[1] if ". " in q else q
+            for q in questions_text.split("\n")
+            if q.strip() and any(q.lower().startswith(str(i)) for i in range(1, 11))
+        ]
+
+        # Prepare metadata for JSON
+        questions_data = {
+            "questions": questions[:10],  # Ensure exactly 10 questions
+            "timestamp": datetime.datetime.now().isoformat(),
+            "role_title": db_data.get("Position Details", {}).get("role_title", ["Unknown Role"])[0]
+        }
+
+         # Log the prepared data
+        print(f"Prepared Questions Data: {json.dumps(questions_data, indent=4)}")
+
+        # Save questions to JSON file
+        try:
+            FileManager.save_questions("questions.json", questions_data)
+        except Exception as save_error:
+            print(f"Error while saving questions: {save_error}")
+
+        print( "questionss saved as ---", questions_data)
+
+
+        return questions[:10]  # Return exactly 10 questions for display
+
+    except Exception as e:
+        st.error(f"Error generating questions: {str(e)}")
+        return []
+
 
 if __name__ == "__main__":
     main()
