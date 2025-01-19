@@ -1,0 +1,84 @@
+{
+    "all_questions": [
+        {
+            "questions": [
+                "Question 1: Can you describe your experience with HTML, CSS, and JavaScript, and provide an example of a project where you utilized these technologies to enhance the user experience?",
+                "Question 2: What specific frontend frameworks have you worked with, such as React, Angular, or Vue.js, and how did you apply them in your previous roles?",
+                "Question 3: Explain your understanding of responsive design principles and how you ensure cross-browser compatibility in your web applications.",
+                "Question 4: How do you approach performance optimization in frontend development, and what tools or techniques do you use for debugging?",
+                "Question 5: Describe your experience with RESTful APIs. Can you provide an example of how you integrated an API into a frontend application?",
+                "Question 6: In your past roles, how have you collaborated with designers and backend developers to implement new features? Can you share a specific instance?",
+                "Question 7: Can you elaborate on your experience mentoring junior developers? What strategies do you use to support their professional development?",
+                "Question 8: How do you manage project requirements and ensure timely delivery of solutions when working with project managers?",
+                "Question 9: Provide an example of a time when you had to adapt quickly to changing priorities or technologies. How did you handle the situation?",
+                "Question 10: Communication is vital in a team environment. How do you ensure effective communication with team members and stakeholders, particularly when working in a hybrid work setting?"
+            ],
+            "timestamp": "2025-01-17T02:16:46.308784",
+            "role_title": "Frontend Developer"
+        },
+        {
+            "questions": [
+                "Question 1: Can you describe your experience with developing and implementing machine learning models? Please provide a specific example of a complex business problem you solved using these models.",
+                "Question 2: How proficient are you in programming languages such as Python and R? Could you share a project where you utilized one of these languages to implement machine learning algorithms?",
+                "Question 3: Discuss your understanding of machine learning frameworks such as TensorFlow or PyTorch. How have you applied these frameworks in your previous roles?",
+                "Question 4: Can you explain your approach to data preprocessing and feature engineering? Provide an example of how this has impacted the performance of a model you developed.",
+                "Question 5: Describe your familiarity with cloud platforms such as AWS, Azure, or Google Cloud. How have you integrated these platforms into your machine learning workflows?",
+                "Question 6: Collaboration is key in our environment. Can you elaborate on your experience working with cross-functional teams, including product managers and data engineers, to ensure the smooth flow of data for model training?",
+                "Question 7: What strategies do you employ to monitor model performance post-deployment? Can you provide an example of how you iterated on a model based on feedback?",
+                "Question 8: Communication is essential in our role. How do you articulate complex technical concepts to non-technical stakeholders? Could you share an instance where you effectively communicated such concepts?",
+                "Question 9: Describe a challenging problem you faced in a machine learning project. How did your proactive problem-solving approach help you overcome this challenge?",
+                "Question 10: Can you discuss your experience with version control systems, specifically Git? How do you incorporate version control into your machine learning projects to ensure collaboration and project tracking?"
+            ],
+            "timestamp": "2025-01-17T21:14:09.917121",
+            "role_title": "Machine Learning Developer"
+        },
+        {
+            "questions": [
+                "Question 1: Can you describe your experience in designing and implementing scalable backend systems? Please provide a specific example of a project where you successfully achieved this.",
+                "Question 2: How do you approach integrating user-facing elements with server-side logic when collaborating with frontend developers? Can you provide an example of a successful collaboration?",
+                "Question 3: Discuss your experience with RESTful APIs and microservices architecture. How have you utilized these technologies in your previous roles?",
+                "Question 4: What database technologies are you most familiar with, and how have you applied them in your backend development projects? Please provide specific instances of their use.",
+                "Question 5: Describe your experience with version control systems, particularly Git. How do you utilize these systems in your development workflow?",
+                "Question 6: Can you explain a situation where you had to troubleshoot and debug an application to ensure high performance and responsiveness? What steps did you take to resolve the issues?",
+                "Question 7: How do you prioritize tasks and manage your time effectively when working on multiple projects or features simultaneously?",
+                "Question 8: Can you provide an example of how you have articulated technical concepts to non-technical stakeholders? What strategies did you use to ensure understanding?",
+                "Question 9: Describe your experience with code reviews. How do you provide constructive feedback to team members during this process?",
+                "Question 10: Have you had any experience with CI/CD pipelines and DevOps practices? If so, please elaborate on how you have implemented these in your projects."
+            ],
+            "timestamp": "2025-01-17T21:20:08.720629",
+            "role_title": "Backend Developer"
+        },
+        {
+            "questions": [
+                "Question 1: Can you describe your experience in designing and implementing scalable backend systems and services? Please provide specific examples from your previous projects.",
+                "Question 2: How do you approach integrating user-facing elements with server-side logic when collaborating with frontend developers? Can you share a specific instance where you successfully achieved this?",
+                "Question 3: Explain the importance of RESTful APIs and microservices architecture in backend development. How have you utilized these in your past roles?",
+                "Question 4: What strategies do you employ to optimize applications for maximum speed and scalability? Can you provide an example of a performance issue you resolved?",
+                "Question 5: How proficient are you in using version control systems, particularly Git? Can you describe a situation where version control played a crucial role in your development process?",
+                "Question 6: Discuss your familiarity with database technologies such as MySQL, PostgreSQL, or MongoDB. How do you decide which database technology to use for a particular project?",
+                "Question 7: Describe your experience with cloud services such as AWS, Azure, or Google Cloud. How have you integrated these services into your backend solutions?",
+                "Question 8: Can you share an example of how you participated in code reviews and provided constructive feedback to your team members? What was the outcome?",
+                "Question 9: Effective communication is vital in a team-oriented environment. How do you articulate technical concepts to non-technical stakeholders? Can you give an example of when you successfully did this?",
+                "Question 10: Describe a challenging problem you encountered in a project and how your problem-solving skills helped you address it. What steps did you take to resolve the issue?"
+            ],
+            "timestamp": "2025-01-17T22:38:22.801395",
+            "role_title": "Backend Developer"
+        },
+        {
+            "questions": [
+                "Question 1: Can you describe your experience with HRIS platforms such as Workday or ADP, and how you have utilized these systems to manage employee data and payroll in your previous roles?",
+                "Question 2: What strategies have you implemented to enhance the end-to-end recruitment process, and how do you measure the effectiveness of these strategies?",
+                "Question 3: In your view, what are the key components of a successful performance management system, and how have you facilitated performance appraisals in your previous positions?",
+                "Question 4: Describe a time when you had to address an employee grievance. What steps did you take to resolve the issue, and what was the outcome?",
+                "Question 5: How do you ensure compliance with local, state, and federal HR regulations, and can you provide an example of a policy you developed to address compliance requirements?",
+                "Question 6: Discuss your experience with data analytics in HR. How have you used tools like Tableau or Excel to inform decision-making processes regarding talent acquisition or employee retention?",
+                "Question 7: Can you provide an example of how you have led change management initiatives within an organization? What challenges did you face, and how did you overcome them?",
+                "Question 8: What methods do you employ to foster a positive workplace culture, and how have you measured the impact of employee engagement initiatives you have implemented?",
+                "Question 9: How do you approach team collaboration and leadership within the HR department? Can you share an experience where you successfully led a team project?",
+                "Question 10: Describe how you would design and implement a training and development program that aligns with both organizational objectives and employee career growth. What factors would you consider?"
+            ],
+            "timestamp": "2025-01-18T17:50:04.176696",
+            "role_title": "HR Manager"
+        }
+    ]
+}
